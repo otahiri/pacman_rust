@@ -1,4 +1,6 @@
+mod maze_algo;
 use bevy::prelude::*;
+use maze_algo::Maze;
 
 fn main() {
     App::new().add_plugins(DefaultPlugins)
@@ -7,7 +9,6 @@ fn main() {
 }
 
 fn setup(mut command: Commands, asset_server: Res<AssetServer>) {
-    command.spawn(Camera2d);
     command.spawn((
             Sprite {
                     image: asset_server.load("player/alive/0.png"),

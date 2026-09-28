@@ -1,3 +1,4 @@
+use rand;
 pub struct Maze {
     data: Vec<Vec<usize>>,
     width: usize,
@@ -21,6 +22,4 @@ impl Maze {
     pub fn get_size(self) -> (usize, usize) {
         (self.width, self.height)
     }
-
-    pub fn
 }
