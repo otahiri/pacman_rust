@@ -1,4 +1,5 @@
 mod maze_algo;
+mod modules;
 use bevy::prelude::*;
 use maze_algo::Maze;
 

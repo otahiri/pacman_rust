@@ -1,3 +1,4 @@
+crate::modules::Direction;
 use rand;
 pub struct Maze {
     data: Vec<Vec<usize>>,
@@ -7,8 +8,11 @@ pub struct Maze {
 
 impl Maze {
     pub fn new(width: usize, height: usize) -> Self {
-        Self { data: vec![vec![15; width]; height], width, height}
-
+        Self {
+            data: vec![vec![15; width]; height],
+            width,
+            height,
+        }
     }
 
     pub fn get_tile(&self, x: usize, y: usize) -> usize {
@@ -21,5 +25,20 @@ impl Maze {
 
     pub fn get_size(self) -> (usize, usize) {
         (self.width, self.height)
+    }
+
+    fn connect_cells(self, direction: Direction, cords: (usize, usize)) {
+        let (x, y) = cords;
+        let cell: usize = self.get_tile(x, y);
+        let (dx, dy, shift) = direction;
+        let (ox, oy) = (x + dx, x + dy);
+        let (_, _, oshift) = direction.oppsite();
+        let opposite_cell: usize = self.get_tile(x + dx, y + dy);
+        let mask = 1 << shift;
+        let opposite_mask = 1 << oshift;
+        cell &= !mask;
+        opposite_cell &= !opposite_mask;
+        self.set_tile(x, y, cell);
+        self.set_tile(ox, oy, cell);
     }
 }
