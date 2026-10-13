@@ -14,12 +14,27 @@ impl Direction {
             Direction::West => Direction::South,
         }
     }
-    pub const fn values(&self) -> (i32, i32, usize){
+    pub const fn values(&self) -> (i32, i32) {
         match self {
-            Direction::North => (-1, 0, 0),
-            Direction::East => (0, 1, 1),
-            Direction::South => (1, 0, 2),
-            Direction::West => (0, -1, 3),
+            Direction::North => (-1, 0),
+            Direction::East => (0, 1),
+            Direction::South => (1, 0),
+            Direction::West => (0, -1),
         }
     }
+
+    pub const fn shift(&self) -> usize {
+        match self {
+            Direction::North => 0,
+            Direction::East => 1,
+            Direction::South => 2,
+            Direction::West => 3,
+        }
+    }
+    pub const ALL: [Direction; 4] = [
+        Direction::North,
+        Direction::East,
+        Direction::South,
+        Direction::West,
+    ];
 }
