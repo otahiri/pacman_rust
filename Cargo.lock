@@ -1635,6 +1635,12 @@ dependencies = [
 ]
 
 [[package]]
+name = "binary-utils"
+version = "0.1.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "b122dace8e2f9ed8242cb18ca3be5895379261b259309fbbb6e71abc6fa7d0e3"
+
+[[package]]
 name = "bindgen"
 version = "0.72.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -2835,6 +2841,15 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "e17592d60ebacc7d5e169f4663c5f84f9161cc90328abcfe8456f41e4dfcb284"
 
 [[package]]
+name = "hex-utilities"
+version = "0.1.5"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "d2157a552ab12c50849f3972720483bbf2499671bc1f8a3a39084fdf1108e892"
+dependencies = [
+ "binary-utils",
+]
+
+[[package]]
 name = "hexasphere"
 version = "16.0.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -3757,6 +3772,7 @@ name = "pacman_rust"
 version = "0.1.0"
 dependencies = [
  "bevy",
+ "hex-utilities",
  "rand 0.10.3",
 ]
 

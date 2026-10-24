@@ -11,15 +11,15 @@ impl Direction {
             Direction::North => Direction::South,
             Direction::East => Direction::West,
             Direction::South => Direction::North,
-            Direction::West => Direction::South,
+            Direction::West => Direction::East,
         }
     }
     pub const fn values(&self) -> (i32, i32) {
         match self {
-            Direction::North => (-1, 0),
-            Direction::East => (0, 1),
-            Direction::South => (1, 0),
-            Direction::West => (0, -1),
+            Direction::North => (0, -1),
+            Direction::East => (1, 0),
+            Direction::South => (0, 1),
+            Direction::West => (-1, 0),
         }
     }
 

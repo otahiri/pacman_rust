@@ -81,6 +81,7 @@ impl Maze {
         let mut frontier: Vec<((usize, usize), (usize, usize), Direction)> =
             Vec::with_capacity(width * height);
         let mut visited: Vec<(usize, usize)> = Vec::with_capacity(width * height);
+        visited.push((x, y));
         frontier.extend(self.get_neighbors((x, y)));
         while frontier.len() > 0 {
             let idx = rand::random_range(0..frontier.len());
