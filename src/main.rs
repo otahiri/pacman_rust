@@ -2,28 +2,30 @@ mod maze_algo;
 mod modules;
 use bevy::prelude::*;
 use maze_algo::Maze;
-use hex_utilities::convert_decimal_to_hexadecimal;
+#[derive(Component)]
+struct Wall;
 
 fn main() {
-    let mut maze = Maze::new(15, 15);
-    maze.create_maze();
-    let (width, height) = maze.get_size();
-    for y in 0..height {
-        for x in 0..width {
-            let hex_num = convert_decimal_to_hexadecimal(maze.get_tile(x, y) as u64, false, None);
-            print!("{}", hex_num);
-        }
-        println!("")
-    }
+    let maze = Maze::new(16, 16);
+    App::new().add_plugins(DefaultPlugins).insert_resource(maze).add_systems(Startup, setup).add_systems(Update, make_walls).run();
+
 }
 
-fn setup(mut command: Commands, asset_server: Res<AssetServer>) {
-    command.spawn((
-            Sprite {
-                    image: asset_server.load("player/alive/0.png"),
-                    ..default()
-                },
-                Transform::from_xyz(100.0, 10.0, 1.0),
+fn setup(mut command: Commands) {
+    command.spawn(Camera2d::default());
+}
 
-            ));
+fn make_walls(mut  command: Commands, asset_serve: Res<AssetServer>, keyboard: Res<ButtonInput<KeyCode>>, wall:Option<Single<Entity, With<Wall>>>) {
+
+    if keyboard.just_pressed(KeyCode::Space) {
+        if wall.is_none() {
+            command.spawn((Sprite::from_image(asset_serve.load("heart.png")), Wall));
+        }
+    }
+    else if keyboard.just_pressed(KeyCode::Backspace) {
+        if let Some(p) = wall {
+            println!("hello");
+             command.entity(*p).despawn();
+        }
+    }
 }
