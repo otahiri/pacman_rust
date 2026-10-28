@@ -1,5 +1,6 @@
 use crate::modules::Direction;
-use rand::{self, distr::weighted::Weight};
+use bevy::ecs::resource::Resource;
+#[derive(Resource)]
 pub struct Maze {
     data: Vec<Vec<usize>>,
     width: usize,
