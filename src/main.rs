@@ -1,59 +1,60 @@
 mod maze_algo;
 mod modules;
+use std::collections::HashSet;
+
+use bevy::platform::collections::hash_set;
 use bevy::prelude::*;
 use maze_algo::Maze;
 
 use crate::modules::Direction;
 
 fn main() {
-    let maze = Maze::new(16, 16);
-    App::new().add_plugins(DefaultPlugins).insert_resource(maze).add_systems(Startup, setup).add_systems(Update, make_walls).run();
-
+    let mut maze = Maze::new(10, 10);
+    maze.create_maze();
+    App::new()
+        .add_plugins(DefaultPlugins)
+        .insert_resource(maze)
+        .add_systems(Startup, setup)
+        .add_systems(Startup, make_walls)
+        .run();
 }
 
 fn setup(mut command: Commands) {
     command.spawn(Camera2d::default());
 }
 
-fn make_walls(mut  command: Commands, asset_server: Res<AssetServer>, keyboard: Res<ButtonInput<KeyCode>>, maze: Res<Maze>) {
-
+fn make_walls(
+    mut command: Commands,
+    asset_server: Res<AssetServer>,
+    keyboard: Res<ButtonInput<KeyCode>>,
+    maze: Res<Maze>,
+) {
+    let size: usize = 32;
     let vert: Handle<Image> = asset_server.load("walls/horizontanl_wall.png");
     let hori: Handle<Image> = asset_server.load("walls/vertical_wall.png");
+    let mut walls_pos: HashSet<(usize, usize, bool)> = HashSet::new();
+    let mut corners_pos: HashSet<(usize, usize, usize)> = HashSet::new();
     let (width, height) = maze.get_size();
-    let size: usize = 32;
     for y in 0..height {
         for x in 0..width {
-            let screen_x: usize = x * size;
-            let screen_y: usize = y * size;
-            if y % 2 == 0 {
-                if x % 2 == 1 {
-                    let north: Direction = Direction::North;
-                    if (1 << north.shift() == 1) {
-                        command.spawn((Sprite::from_image(hori.clone()), Transform::from_xyz(screen_x as f32, screen_y as f32, 0.0)));
-                    }
+            for dir in Direction::ALL {
+                if maze.check_wall(x, y, &dir) {
+                    walls_pos.insert((
+                        (x * size) * 2 + 1,
+                        (y * size) * 2 + 1,
+                        matches!(&dir, Direction::South | Direction::North),
+                    ));
                 }
             }
-            else {
-
-                    let west: Direction = Direction::West;
-                    if (1 << west.shift() &  == 1) {
-                        command.spawn((Sprite::from_image(hori.clone()), Transform::from_xyz(screen_x as f32, screen_y as f32, 0.0)));
-                    }
-            }
-
-            todo!("make algo ")
-        }
-
-    }
-    if keyboard.just_pressed(KeyCode::Space) {
-        if wall.is_none() {
-            command.spawn((Sprite::from_image(asset_server.load("heart.png")), Wall));
         }
     }
-    else if keyboard.just_pressed(KeyCode::Backspace) {
-        if let Some(p) = wall {
-            println!("hello");
-             command.entity(*p).despawn();
-        }
+    let corner_x: f32 = ((size * width) / 2 ) as f32;
+    let corner_y: f32 = ((size * height) / 2 ) as f32;
+    for (x, y, is_hor) in walls_pos {
+        let wall = if is_hor { &hori } else { &vert };
+        command.spawn((
+            Sprite::from_image(wall.clone()),
+            Transform::from_xyz(x as f32 - corner_x , y as f32 - corner_y , 0.0),
+        ));
     }
 }

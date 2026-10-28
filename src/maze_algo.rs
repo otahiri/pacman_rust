@@ -38,7 +38,7 @@ impl Maze {
         return Some((new_x, new_y));
     }
 
-    pub fn check_wall(&self, x: usize, y: usize, dir: Direction) -> bool {
+    pub fn check_wall(&self, x: usize, y: usize, dir: &Direction) -> bool {
         let shift = dir.shift();
         self.get_tile(x, y) & (1 << shift) != 0
     }
